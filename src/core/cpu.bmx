@@ -62,15 +62,28 @@ Type CPU
 			' -- ADC
 
 			Case OP_ADC_IMM
-				Local value1:Byte  = Self.accumulator
-				Local value2:Byte  = Self.readNextByte()
-				Local result:Short = value1 + value2 + Self.carryFlag
+				Self.addWithCarry(Self.readNextByte())
 
-				Self.updateCarryFlag(result)
-				Self.updateOverflowFlag(value1, value2, result)
-				Self.updateNegativeFlag(result)
+			Case OP_ADC_ZP
+				Self.addWithCarry(Self.peekZeroPageByte(Self.readNextByte()))
 
-				Self.accumulator  = result
+			Case OP_ADC_ZPX
+				Self.addWithCarry(Self.peekZeroPageByte(Self.readNextByte() + Self.xRegister))
+
+			Case OP_ADC_ABS
+				Self.addWithCarry(Self.peekByteAt(Self.readNextWord()))
+
+			Case OP_ADC_ABSX
+				Self.addWithCarry(Self.peekByteAt(Self.readNextWord() + Self.xRegister))
+
+			Case OP_ADC_ABSY
+				Self.addWithCarry(Self.peekByteAt(Self.readNextWord() + Self.yRegister))
+
+			Case OP_ADC_INDX
+				Self.addWithCarry(Self.peekByteAt(Self.peekZeroPageWord(Self.readNextByte() + Self.xRegister)))
+
+			Case OP_ADC_INDY
+				Self.addWithCarry(Self.peekByteAt(Self.peekZeroPageWord(Self.readNextByte()) + Self.yRegister))
 
 
 			' --------------------------------
@@ -617,6 +630,17 @@ Type CPU
 		Local address:Short = (Self.programCounter & $FF00) + offset
 
 		Return address
+	End Method
+
+	Method addWithCarry:Byte(value2:Byte)
+		Local value1:Byte  = Self.accumulator
+		Local result:Short = value1 + value2 + Self.carryFlag
+
+		Self.updateCarryFlag(result)
+		Self.updateOverflowFlag(value1, value2, result)
+		Self.updateNegativeFlag(result)
+
+		Self.accumulator = result
 	End Method
 
 	Method rol:Byte(value:Byte)
