@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<project name="6502 Simulator" default="build:all">
+
+  <!-- Global properties -->
+  <property name="build.paths.base" value="${project::get-buildfile-path()}" />
+  <property name="build.paths.output" value="${build.paths.base}/build/" />
+
+
+  <!-- ======================================================================
+       == Initialisation Targets
+       ====================================================================== -->
+
+  <target name="build:clean" description="Clears all temporary BlitzMax files">
+    <delete>
+      <fileset dir="${build.paths.base}/src/">
+        <include name="**/.bmx/*.s" />
+        <include name="**/.bmx/*.i" />
+        <include name="**/.bmx/*.o" />
+        <include name="**/*.exe" />
+      </fileset>
+    </delete>
+  </target>
+
+
+  <!-- ======================================================================
+       == Source building
+       ====================================================================== -->
+
+  <target name="build:all"
+          description="Build the simulator and assembler"
+          depends="build:clean, build:assembler, build:simulator" />
+
+  <target name="build:assembler" description="Build the assembler tool">
+  </target>
+
+  <target name="build:simulator">
+    <bmk action="makeapp" debug="true" threaded="true"
+         source="${build.paths.base}/src/main.bmx"
+         output="${build.paths.output}simulator"
+         failonerror="true" />
+  </target>
+
+  <target name="build:simulator:release">
+    <bmk action="makeapp" debug="false" threaded="true"
+         source="${build.paths.base}/src/main.bmx"
+         output="${build.paths.output}simulator"
+         failonerror="true" />
+  </target>
+
+</project>
