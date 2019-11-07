@@ -18,6 +18,8 @@ SuperStrict
 Import brl.max2d
 Import brl.glmax2d
 
+Import "../core/util.bmx"
+
 Type Display
 	Field _start:Short              '< Start address of the screen in RAM.
 	Field _width:Byte       = 32    '< Width of the screen in virtual pixels.
@@ -81,6 +83,25 @@ Type Display
 			Case $E ; SetColor(0, 0, 255)     ' Light blue
 			Case $F ; SetColor(192, 192, 192) ' Light grey
 		End Select
+	End Method
+
+
+	' ----------------------------------------------------------------------
+	' -- Debug Helpers
+	' ----------------------------------------------------------------------
+
+	Method dumpScreen()
+		Local offset:Short = Self._start
+
+		For Local y:Int = 0 To 31
+			Local line:String = ""
+			For Local x:Int = 0 To 31
+				line :+ bytetohex(Self._memory.PeekByte(offset)) + " "
+				offset :+ 1
+			Next
+
+			Print line
+		Next
 	End Method
 
 
