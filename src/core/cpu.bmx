@@ -569,6 +569,43 @@ Type CPU
 
 
 	' ----------------------------------------------------------------------
+	' -- Memory Helpers
+	' ----------------------------------------------------------------------
+
+	Method getImmediateValue:Byte()
+		Return Self.readNextByte()
+	End Method
+
+	Method getZeroPageValue:Byte()
+		Return Self.peekZeroPageByte(Self.readNextByte())
+	End Method
+
+	Method getZeroPageValueX:Byte()
+		Return Self.peekZeroPageByte(Self.readNextByte() + Self.xRegister)
+	End Method
+
+	Method getAbsoluteValue:Byte()
+		Return Self.peekByteAt(Self.readNextWord())
+	End Method
+
+	Method getAbsoluteValueX:Byte()
+		Return Self.peekByteAt(Self.readNextWord() + Self.xRegister)
+	End Method
+
+	Method getAbsoluteValueY:Byte()
+		Return Self.peekByteAt(Self.readNextWord() + Self.yRegister)
+	End Method
+
+	Method getIndirectValueX:Byte()
+		Return Self.peekByteAt(Self.peekZeroPageWord(Self.readNextByte() + Self.xRegister))
+	End Method
+
+	Method getIndirectValueY:Byte()
+		Return Self.peekByteAt(Self.peekZeroPageWord(Self.readNextByte()) + Self.yRegister)
+	End Method
+
+
+	' ----------------------------------------------------------------------
 	' -- Flag Functions
 	' ----------------------------------------------------------------------
 
