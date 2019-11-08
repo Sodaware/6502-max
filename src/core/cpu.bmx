@@ -142,6 +142,20 @@ Type CPU
 
 
 			' --------------------------------
+			' -- BIT
+
+			Case OP_BIT_ABS
+				Local value:Byte = Self.getAbsoluteValue()
+				Self.updateNVFlags(value)
+				Self.zeroFlag = (0 = (Self.accumulator & value))
+
+			Case OP_BIT_ZP
+				Local value:Byte = Self.getZeroPageValue()
+				Self.updateNVFlags(value)
+				Self.zeroFlag = (0 = (Self.accumulator & value))
+
+
+			' --------------------------------
 			' -- CMP
 
 			Case OP_CMP_IMM
@@ -660,6 +674,11 @@ Type CPU
 	Method updateNzFlags(value:Byte)
 		Self.updateZeroFlag(value)
 		Self.updateNegativeFlag(value)
+	End Method
+
+	Method updateNVFlags(value:Byte)
+		Self.updateNegativeFlag(value)
+		Self.overflowFlag = ((1 Shl 6) & value) <> 0
 	End Method
 
 	Method updateZeroFlag(value:Byte)
