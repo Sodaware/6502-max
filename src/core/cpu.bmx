@@ -126,7 +126,19 @@ Type CPU
 			' -- ASL
 
 			Case OP_ASL_ACC
-				Self.accumulator = Self.rol(Self.accumulator)
+				Self.accumulator = Self.arithmeticShiftLeft(Self.accumulator)
+
+			Case OP_ASL_ZP
+				Self.accumulator = Self.arithmeticShiftLeft(Self.getZeroPageValue())
+
+			Case OP_ASL_ZPX
+				Self.accumulator = Self.arithmeticShiftLeft(Self.getZeroPageValueX())
+
+			Case OP_ASL_ABS
+				Self.accumulator = Self.arithmeticShiftLeft(Self.getAbsoluteValue())
+
+			Case OP_ASL_ABSX
+				Self.accumulator = Self.arithmeticShiftLeft(Self.getAbsoluteValueX())
 
 
 			' --------------------------------
@@ -191,7 +203,7 @@ Type CPU
 				Local address:Byte = Self.readNextByte()
 				Local value:Byte   = Self.peekZeroPageByte(address)
 
-				Self.writeMemory(address, Self.rol(value))
+				Self.writeMemory(address, Self.arithmeticShiftLeft(value))
 
 
 
@@ -708,7 +720,7 @@ Type CPU
 		Self.accumulator = result
 	End Method
 
-	Method rol:Byte(value:Byte)
+	Method arithmeticShiftLeft:Byte(value:Byte)
 		Local wordResult:Short = value Shl 1 | Self.carryFlag
 		Self.carryFlag = (wordResult > $FF)
 
