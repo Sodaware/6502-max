@@ -586,6 +586,12 @@ Type CPU
 			Case OP_PLA
 				Self.accumulator = Self.popByteFromStack()
 
+			Case OP_PHP
+				Self.pushByteToStack(Self.getProcessorState())
+
+			Case OP_PLP
+				Self.setProcessorState(Self.popByteFromStack())
+
 
 			' --------------------------------
 			' -- Flag Instructions
@@ -675,6 +681,32 @@ Type CPU
 	Method reset()
 		Self.programCounter = 0
 		Self.accumulator    = 0
+	End Method
+
+	' Pack the current processor state into a single byte.
+	Method getProcessorState:Byte()
+		Local state:Byte
+
+		state :| Self.carryFlag Shl 0
+		state :| Self.zeroFlag  Shl 1
+		state :| Self.interruptFlag Shl 2
+		state :| Self.decimalFlag Shl 3
+		state :| 1 Shl 4 ' Break is active when using PHP
+		state :| 1 Shl 5 ' Unused is always true when using PHP
+		state :| Self.overflowFlag Shl 6
+		state :| Self.negativeFlag Shl 7
+
+		Return state
+	End Method
+
+	Method setProcessorState(state:Byte)
+		Self.carryFlag     = state & (1 Shl 0)
+		Self.zeroFlag      = state & (1 Shl 1)
+		Self.interruptFlag = state & (1 Shl 2)
+		Self.decimalFlag   = state & (1 Shl 3)
+		Self.breakFlag     = state & (0 Shl 4)
+		Self.overflowFlag  = state & (1 Shl 6)
+		Self.negativeFlag  = state & (1 Shl 7)
 	End Method
 
 
