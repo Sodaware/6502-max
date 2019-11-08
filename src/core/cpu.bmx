@@ -396,6 +396,26 @@ Type CPU
 				Self.yRegister = Self.peekByteAt(Self.readNextWord() + Self.xRegister)
 				Self.updateNzFlags(Self.yRegister)
 
+
+			' --------------------------------
+			' -- LSR
+
+			Case OP_LSR_ACC
+				Self.accumulator = Self.arithmeticShiftRight(Self.accumulator)
+
+			Case OP_LSR_ZP
+				Self.accumulator = Self.arithmeticShiftRight(Self.getZeroPageValue())
+
+			Case OP_LSR_ZPX
+				Self.accumulator = Self.arithmeticShiftRight(Self.getZeroPageValueX())
+
+			Case OP_LSR_ABS
+				Self.accumulator = Self.arithmeticShiftRight(Self.getAbsoluteValue())
+
+			Case OP_LSR_ABSX
+				Self.accumulator = Self.arithmeticShiftRight(Self.getAbsoluteValueX())
+
+
 			' --------------------------------
 			' -- SBC
 
@@ -829,6 +849,15 @@ Type CPU
 		Self.carryFlag = (wordResult > $FF)
 
 		Local result:Byte = wordResult & $FF
+		Self.updateNzFlags(result)
+
+		Return result
+	End Method
+
+	Method arithmeticShiftRight:Byte(value:Byte)
+		Local result:Byte = value Shr 1 | Self.carryFlag Shl 7
+
+		Self.carryFlag = (0 <> (value & $01))
 		Self.updateNzFlags(result)
 
 		Return result
