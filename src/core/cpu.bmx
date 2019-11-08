@@ -87,18 +87,46 @@ Type CPU
 
 
 			' --------------------------------
+			' -- AND
+
+			Case OP_AND_IMM
+				Self.accumulator = Self.accumulator & Self.getImmediateValue()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_AND_ZP
+				Self.accumulator = Self.accumulator & Self.getZeroPageValue()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_AND_ZPX
+				Self.accumulator = Self.accumulator & Self.getZeroPageValue()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_AND_ABS
+				Self.accumulator = Self.accumulator & Self.getAbsoluteValue()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_AND_ABSX
+				Self.accumulator = Self.accumulator & Self.getAbsoluteValueX()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_AND_ABSY
+				Self.accumulator = Self.accumulator & Self.getAbsoluteValueY()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_AND_INDX
+				Self.accumulator = Self.accumulator & Self.getIndirectValueX()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_AND_INDY
+				Self.accumulator = Self.accumulator & Self.getIndirectValueY()
+				Self.updateNzFlags(Self.accumulator)
+
+
+			' --------------------------------
 			' -- ASL
 
 			Case OP_ASL_ACC
 				Self.accumulator = Self.rol(Self.accumulator)
-
-
-			' --------------------------------
-			' -- AND
-
-			Case OP_AND_IMM
-				Self.accumulator = Self.accumulator & Self.readNextByte()
-				Self.updateNzFlags(Self.accumulator)
 
 
 			' --------------------------------
