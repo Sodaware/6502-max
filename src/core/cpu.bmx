@@ -62,28 +62,28 @@ Type CPU
 			' -- ADC
 
 			Case OP_ADC_IMM
-				Self.addWithCarry(Self.readNextByte())
+				Self.addWithCarry(Self.getImmediateValue())
 
 			Case OP_ADC_ZP
-				Self.addWithCarry(Self.peekZeroPageByte(Self.readNextByte()))
+				Self.addWithCarry(Self.getZeroPageValue())
 
 			Case OP_ADC_ZPX
-				Self.addWithCarry(Self.peekZeroPageByte(Self.readNextByte() + Self.xRegister))
+				Self.addWithCarry(Self.getZeroPageValueX())
 
 			Case OP_ADC_ABS
-				Self.addWithCarry(Self.peekByteAt(Self.readNextWord()))
+				Self.addWithCarry(Self.getAbsoluteValue())
 
 			Case OP_ADC_ABSX
-				Self.addWithCarry(Self.peekByteAt(Self.readNextWord() + Self.xRegister))
+				Self.addWithCarry(Self.getAbsoluteValueX())
 
 			Case OP_ADC_ABSY
-				Self.addWithCarry(Self.peekByteAt(Self.readNextWord() + Self.yRegister))
+				Self.addWithCarry(Self.getAbsoluteValueY())
 
 			Case OP_ADC_INDX
-				Self.addWithCarry(Self.peekByteAt(Self.peekZeroPageWord(Self.readNextByte() + Self.xRegister)))
+				Self.addWithCarry(Self.getIndirectValueX())
 
 			Case OP_ADC_INDY
-				Self.addWithCarry(Self.peekByteAt(Self.peekZeroPageWord(Self.readNextByte()) + Self.yRegister))
+				Self.addWithCarry(Self.getIndirectValueY())
 
 
 			' --------------------------------
