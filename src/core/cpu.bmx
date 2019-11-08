@@ -226,6 +226,34 @@ Type CPU
 
 
 			' --------------------------------
+			' -- EOR
+
+			Case OP_EOR_IMM
+				Self.exclusiveOr(Self.getImmediateValue())
+
+			Case OP_EOR_ZP
+				Self.exclusiveOr(Self.getZeroPageValue())
+
+			Case OP_EOR_ZPX
+				Self.exclusiveOr(Self.getZeroPageValueX())
+
+			Case OP_EOR_ABS
+				Self.exclusiveOr(Self.getAbsoluteValue())
+
+			Case OP_EOR_ABSX
+				Self.exclusiveOr(Self.getAbsoluteValueX())
+
+			Case OP_EOR_ABSY
+				Self.exclusiveOr(Self.getAbsoluteValueY())
+
+			Case OP_EOR_INDX
+				Self.exclusiveOr(Self.getIndirectValueX())
+
+			Case OP_EOR_INDY
+				Self.exclusiveOr(Self.getIndirectValueY())
+
+
+			' --------------------------------
 			' -- JMP
 
 			Case OP_JMP_ABS
@@ -795,6 +823,11 @@ Type CPU
 	Method decreaseMemoryAt(address:Short)
 		Self.writeMemory(address, Self.peekByteAt(address) - 1)
 		Self.updateNzFlags(Self.peekByteAt(address))
+	End Method
+
+	Method exclusiveOr(value:Byte)
+		Self.accumulator = Self.accumulator ~ value
+		Self.updateNzFlags(Self.accumulator)
 	End Method
 
 	Method dumpState:String()
