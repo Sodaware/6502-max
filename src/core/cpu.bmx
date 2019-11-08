@@ -536,6 +536,42 @@ Type CPU
 
 
 			' --------------------------------
+			' -- ORA
+
+			Case OP_ORA_IMM
+				Self.accumulator = Self.accumulator | Self.getImmediateValue()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_ORA_ZP
+				Self.accumulator = Self.accumulator | Self.getZeroPageValue()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_ORA_ZPX
+				Self.accumulator = Self.accumulator | Self.getZeroPageValueX()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_ORA_ABS
+				Self.accumulator = Self.accumulator | Self.getAbsoluteValue()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_ORA_ABSX
+				Self.accumulator = Self.accumulator | Self.getAbsoluteValueX()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_ORA_ABSY
+				Self.accumulator = Self.accumulator | Self.getAbsoluteValueY()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_ORA_INDX
+				Self.accumulator = Self.accumulator | Self.getIndirectValueX()
+				Self.updateNzFlags(Self.accumulator)
+
+			Case OP_ORA_INDY
+				Self.accumulator = Self.accumulator | Self.getIndirectValueY()
+				Self.updateNzFlags(Self.accumulator)
+
+
+			' --------------------------------
 			' -- Stack Instructions
 
 			Case OP_TXS
