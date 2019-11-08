@@ -297,12 +297,39 @@ Type CPU
 			' --------------------------------
 			' -- ROL
 
+			Case OP_ROL_ACC
+				Self.accumulator = Self.arithmeticShiftLeft(Self.accumulator)
+
 			Case OP_ROL_ZP
-				Local address:Byte = Self.readNextByte()
-				Local value:Byte   = Self.peekZeroPageByte(address)
+				Self.rolMemoryAt(Self.readNextByte())
 
-				Self.writeMemory(address, Self.arithmeticShiftLeft(value))
+			Case OP_ROL_ZPX
+				Self.rolMemoryAt(Self.readNextByte() + Self.xRegister)
 
+			Case OP_ROL_ABS
+				Self.rolMemoryAt(Self.readNextWord())
+
+			Case OP_ROL_ABSX
+				Self.rolMemoryAt(Self.readNextWord() + Self.xRegister)
+
+
+			' --------------------------------
+			' -- ROR
+
+			Case OP_ROR_ACC
+				Self.accumulator = Self.arithmeticShiftLeft(Self.accumulator)
+
+			Case OP_ROR_ZP
+				Self.rorMemoryAt(Self.readNextByte())
+
+			Case OP_ROR_ZPX
+				Self.rorMemoryAt(Self.readNextByte() + Self.xRegister)
+
+			Case OP_ROR_ABS
+				Self.rorMemoryAt(Self.readNextWord())
+
+			Case OP_ROR_ABSX
+				Self.rorMemoryAt(Self.readNextWord() + Self.xRegister)
 
 
 			' --------------------------------
@@ -929,6 +956,14 @@ Type CPU
 		Self.updateNzFlags(result)
 
 		Return result
+	End Method
+
+	Method rolMemoryAt(address:Short)
+		Self.writeMemory(address, Self.arithmeticShiftLeft(Self.peekByteAt(address)))
+	End Method
+
+	Method rorMemoryAt(address:Short)
+		Self.writeMemory(address, Self.arithmeticShiftRight(Self.peekByteAt(address)))
 	End Method
 
 	Method compareRegister(register:Byte, value:Byte)
