@@ -210,6 +210,22 @@ Type CPU
 
 
 			' --------------------------------
+			' -- DEC
+
+			Case OP_DEC_ZP
+				Self.decreaseMemoryAt(Self.readNextByte())
+
+			Case OP_DEC_ZPX
+				Self.decreaseMemoryAt(Self.readNextByte() + Self.xRegister)
+
+			Case OP_DEC_ABS
+				Self.decreaseMemoryAt(Self.readNextWord())
+
+			Case OP_DEC_ABSX
+				Self.decreaseMemoryAt(Self.readNextWord() + Self.xRegister)
+
+
+			' --------------------------------
 			' -- JMP
 
 			Case OP_JMP_ABS
@@ -774,6 +790,11 @@ Type CPU
 		Self.carryFlag    = (register >= value)
 		Self.zeroFlag     = (register = value)
 		Self.negativeFlag = Self.isNegative(register - value)
+	End Method
+
+	Method decreaseMemoryAt(address:Short)
+		Self.writeMemory(address, Self.peekByteAt(address) - 1)
+		Self.updateNzFlags(Self.peekByteAt(address))
 	End Method
 
 	Method dumpState:String()
