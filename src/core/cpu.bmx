@@ -98,7 +98,7 @@ Type CPU
 				Self.updateNzFlags(Self.accumulator)
 
 			Case OP_AND_ZPX
-				Self.accumulator = Self.accumulator & Self.getZeroPageValue()
+				Self.accumulator = Self.accumulator & Self.getZeroPageValueX()
 				Self.updateNzFlags(Self.accumulator)
 
 			Case OP_AND_ABS
