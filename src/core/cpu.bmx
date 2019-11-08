@@ -454,22 +454,29 @@ Type CPU
 			' --------------------------------
 			' -- SBC
 
-			' TODO: Fix this
+			Case OP_SBC_IMM
+				Self.subtractWithCarry(Self.getImmediateValue())
+
+			Case OP_SBC_ZP
+				Self.subtractWithCarry(Self.getZeroPageValue())
+
 			Case OP_SBC_ZPX
-				Local value1:Byte  = Self.accumulator
-				Local value2:Byte  = Self.peekZeroPageByte(Self.readNextByte() + Self.xRegister)
+				Self.subtractWithCarry(Self.getZeroPageValueX())
 
-				Local result:Short = value1 - value2 - (Not Self.carryFlag)
-				Local value:Byte   = result ' Truncated
+			Case OP_SBC_ABS
+				Self.subtractWithCarry(Self.getAbsoluteValue())
 
-				Self.updateOverflowFlag(value1, value2, result)
-				' TODO: Use `updateOverflowFlag` here
-'				Self.overflowFlag = (Self.accumulator ~ value2) & (Self.accumulator ~ value)
+			Case OP_SBC_ABSX
+				Self.subtractWithCarry(Self.getAbsoluteValueX())
 
-				Self.accumulator = value
-				Self.updateNegativeFlag(Self.accumulator)
-				Self.updateZeroFlag(value)
-				Self.carryFlag = (result <= $FF)
+			Case OP_SBC_ABSY
+				Self.subtractWithCarry(Self.getAbsoluteValueY())
+
+			Case OP_SBC_INDX
+				Self.subtractWithCarry(Self.getIndirectValueX())
+
+			Case OP_SBC_INDY
+				Self.subtractWithCarry(Self.getIndirectValueY())
 
 
 			' --------------------------------
@@ -945,6 +952,23 @@ Type CPU
 		Self.updateNegativeFlag(result)
 
 		Self.accumulator = result
+	End Method
+
+	Method subtractWithCarry:Byte(value2:Byte)
+		Local value1:Byte  = Self.accumulator
+
+		Local result:Short = value1 - value2 - (Not Self.carryFlag)
+		Local value:Byte   = result ' Truncated
+
+		Self.updateOverflowFlag(value1, value2, result)
+
+		' TODO: Use `updateOverflowFlag` here
+		' Self.overflowFlag = (Self.accumulator ~ value2) & (Self.accumulator ~ value)
+
+		Self.accumulator = value
+		Self.updateNegativeFlag(Self.accumulator)
+		Self.updateZeroFlag(value)
+		Self.carryFlag = (result <= $FF)
 	End Method
 
 	Method arithmeticShiftLeft:Byte(value:Byte)
