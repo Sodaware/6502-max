@@ -254,6 +254,22 @@ Type CPU
 
 
 			' --------------------------------
+			' -- INC
+
+			Case OP_INC_ZP
+				Self.increaseMemoryAt(Self.readNextByte())
+
+			Case OP_INC_ZPX
+				Self.increaseMemoryAt(Self.readNextByte() + Self.xRegister)
+
+			Case OP_INC_ABS
+				Self.increaseMemoryAt(Self.readNextWord())
+
+			Case OP_INC_ABSX
+				Self.increaseMemoryAt(Self.readNextWord() + Self.xRegister)
+
+
+			' --------------------------------
 			' -- JMP
 
 			Case OP_JMP_ABS
@@ -451,15 +467,6 @@ Type CPU
 
 			Case OP_STY_ABS
 				Self.writeMemory(Self.readNextWord(), Self.yRegister)
-
-
-			' --------------------------------
-			' -- INC
-
-			Case OP_INC_ZP
-				Local address:Byte = Self.readNextByte()
-				Self.writeMemory(address, Self.peekZeroPageByte(address) + 1)
-				Self.updateNzFlags(Self.peekZeroPageByte(address))
 
 
 			' --------------------------------
@@ -822,6 +829,11 @@ Type CPU
 
 	Method decreaseMemoryAt(address:Short)
 		Self.writeMemory(address, Self.peekByteAt(address) - 1)
+		Self.updateNzFlags(Self.peekByteAt(address))
+	End Method
+
+	Method increaseMemoryAt(address:Short)
+		Self.writeMemory(address, Self.peekByteAt(address) + 1)
 		Self.updateNzFlags(Self.peekByteAt(address))
 	End Method
 
