@@ -159,33 +159,54 @@ Type CPU
 			' -- CMP
 
 			Case OP_CMP_IMM
-				Local value:Byte = Self.readNextByte()
+				Self.compareRegister(Self.accumulator, Self.getImmediateValue())
 
-				Self.carryFlag    = (Self.accumulator >= value)
-				Self.zeroFlag     = (Self.accumulator = value)
-				Self.negativeFlag = Self.isNegative(Self.accumulator - value)
+			Case OP_CMP_ZP
+				Self.compareRegister(Self.accumulator, Self.getZeroPageValue())
+
+			Case OP_CMP_ZPX
+				Self.compareRegister(Self.accumulator, Self.getZeroPageValueX())
+
+			Case OP_CMP_ABS
+				Self.compareRegister(Self.accumulator, Self.getAbsoluteValue())
+
+			Case OP_CMP_ABSX
+				Self.compareRegister(Self.accumulator, Self.getAbsoluteValueX())
+
+			Case OP_CMP_ABSY
+				Self.compareRegister(Self.accumulator, Self.getAbsoluteValueY())
+
+			Case OP_CMP_INDX
+				Self.compareRegister(Self.accumulator, Self.getIndirectValueX())
+
+			Case OP_CMP_INDY
+				Self.compareRegister(Self.accumulator, Self.getIndirectValueY())
 
 
 			' --------------------------------
 			' -- CPX
 
 			Case OP_CPX_IMM
-				Local value:Byte = Self.readNextByte()
+				Self.compareRegister(Self.xRegister, Self.getImmediateValue())
 
-				Self.carryFlag    = (Self.xRegister >= value)
-				Self.zeroFlag     = (Self.xRegister = value)
-				Self.negativeFlag = Self.isNegative(Self.xRegister - value)
+			Case OP_CPX_ZP
+				Self.compareRegister(Self.xRegister, Self.getZeroPageValue())
+
+			Case OP_CPX_ABS
+				Self.compareRegister(Self.xRegister, Self.getAbsoluteValue())
 
 
 			' --------------------------------
 			' -- CPY
 
 			Case OP_CPY_IMM
-				Local value:Byte = Self.readNextByte()
+				Self.compareRegister(Self.yRegister, Self.getImmediateValue())
 
-				Self.carryFlag    = (Self.yRegister >= value)
-				Self.zeroFlag     = (Self.yRegister = value)
-				Self.negativeFlag = Self.isNegative(Self.yRegister - value)
+			Case OP_CPY_ZP
+				Self.compareRegister(Self.yRegister, Self.getZeroPageValue())
+
+			Case OP_CPY_ABS
+				Self.compareRegister(Self.yRegister, Self.getAbsoluteValue())
 
 
 			' --------------------------------
@@ -747,6 +768,12 @@ Type CPU
 		Self.updateNzFlags(result)
 
 		Return result
+	End Method
+
+	Method compareRegister(register:Byte, value:Byte)
+		Self.carryFlag    = (register >= value)
+		Self.zeroFlag     = (register = value)
+		Self.negativeFlag = Self.isNegative(register - value)
 	End Method
 
 	Method dumpState:String()
