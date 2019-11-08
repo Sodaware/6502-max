@@ -288,6 +288,14 @@ Type CPU
 
 
 			' --------------------------------
+			' -- RTI
+
+			Case OP_RTI
+				Self.setProcessorState(Self.popByteFromStack())
+				Self.programCounter = Self.popWordFromStack()
+
+
+			' --------------------------------
 			' -- RTS
 
 			Case OP_RTS

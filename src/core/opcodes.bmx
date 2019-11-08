@@ -131,6 +131,7 @@ Const OP_ROR_ABSX:Byte = $66
 Const OP_ROR_ACC:Byte  = $76
 Const OP_ROR_ZP:Byte   = $6E
 Const OP_ROR_ZPX:Byte  = $7E
+Const OP_RTI:Byte      = $40
 Const OP_RTS:Byte      = $60
 Const OP_SBC_ABS:Byte  = $ED
 Const OP_SBC_ABSX:Byte = $FD
