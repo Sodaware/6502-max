@@ -275,6 +275,9 @@ Type CPU
 			Case OP_JMP_ABS
 				Self.programCounter = Self.readNextWord()
 
+			Case OP_JMP_IND
+				Self.programCounter = Self.peekWrappedWordAt(Self.readNextWord())
+
 
 			' --------------------------------
 			' -- JSR
@@ -640,7 +643,17 @@ Type CPU
 	End Method
 
 	Method peekWordAt:Short(address:Short)
-		Return Self.memory.PeekShort(address)
+		Local lowByte:Byte  = Self.peekByteAt(address)
+		Local highByte:Byte = Self.peekByteAt(address + 1)
+
+		Return (highByte Shl 8) + lowByte
+	End Method
+
+	Method peekWrappedWordAt:Short(address:Short)
+		Local lowByte:Byte  = Self.peekByteAt(address)
+		Local highByte:Byte = Self.peekByteAt(address + 1)
+
+		Return (highByte Shl 8) + lowByte
 	End Method
 
 	''' <summary>Read a byte from memory at the current program counter and move to the next byte.</summary>
